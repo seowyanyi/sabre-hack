@@ -49,7 +49,7 @@ function toHumanReadableDateTime(date) {
   var mlist = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
   var s = date.getDate() + " " + mlist[date.getMonth()] + " " + date.getFullYear();
-  if (date.getHours() !== "0" || date.getMinutes() !== "0") {
+  if (date.getHours() !== 0 || date.getMinutes() !== 0) {
     s = s + " " + date.getHours() + ":" + date.getMinutes();
   }
   return s;
@@ -150,7 +150,7 @@ function getFlights(callback) {
     },
     error: function(err) {
       console.log(err);
-      callback(formatFlights(Meteor.chatbot.backupFlights));
+      callback(formatFlights(backupFlights));
     }
   });
 }
@@ -292,23 +292,23 @@ function commandParser(command, dateStr, msgId) {
 
 function getFinalItinerary() {
   return [{
-          to: '',
+          to: 'NEW YORK CITY',
           from: 'Singapore',
-          depart: '',
-          return: '',
+          depart: '10 Nov',
+          return: '15 Nov',
           package: {
-            name: '',
-            price: '0'
+            name: 'Fun Galore',
+            price: '$400'
           },
           flight: {
-            name: '',
-            price: '0'
+            name: 'China Air',
+            price: '$4050'
           },
           hotel: {
-            name: '',
-            price: '0'
+            name: 'Mandarin Oriental',
+            price: '$853'
           },
-          total: '0'
+          total: '$5303'
         }];
 }
 
