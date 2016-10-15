@@ -13,6 +13,9 @@
               <!-- message template -->
                {{#each messages}}
                   {{> message}}
+                                  <script>     $(".panel-body").animate({
+      scrollTop: 7200
+    }, "fast");</script>
                 {{/each}}
                 <span id="media-list"></span>
                 <script>     $(".panel-body").animate({
