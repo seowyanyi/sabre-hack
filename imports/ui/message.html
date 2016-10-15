@@ -1,18 +1,15 @@
 <template name="message">
-  <li class="media">
-    <div class="media-body">
-      <div class="media">
-        <a class="pull-left" href="#">
-          <img class="media-object img-circle img-responsive" src="http://lorempixel.com/60/60/people/" />
-        </a>
-        <div class="media-body" >
-          {{text}}
-          <br />
-          <!-- user information -->
-          <small class="text-muted"><strong>{{username}}</strong> | {{createdAt}}</small>
-          <hr />
-        </div>
+  {{#if isReceived username}}
+    <div class="col-message-received">
+      <div class="message-received">
+        <p>{{text}}</p>
       </div>
     </div>
-  </li>
+  {{else}}
+    <div class="col-message-sent">
+      <div class="message-sent">
+        <p>{{text}}</p>
+      </div>
+    </div>
+  {{/if}}
 </template>

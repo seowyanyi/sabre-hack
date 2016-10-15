@@ -3,6 +3,10 @@ import './body.html';
 import './message.js';
 import { Messages } from '../api/messages.js';
 
+function isSameAsPrevious(prevIsReceived, msg) {
+  return prevIsReceived === isReceived(msg);
+}
+
 Template.body.helpers({
   messages() {
     return Messages.find();
