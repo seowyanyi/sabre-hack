@@ -18,7 +18,7 @@ Template.body.helpers({
 });
 
 Template.body.events({
-  'submit .new-message'(event) {
+  'submit .new-message': function(event) {
     // Prevent default browser form submit
     event.preventDefault();
 
