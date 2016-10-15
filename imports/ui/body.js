@@ -13,7 +13,7 @@ Template.body.onRendered(function () {
 Template.body.helpers({
   messages() {
     return Messages.find();
-  },
+  }
 });
 
 Template.body.events({
@@ -25,13 +25,14 @@ Template.body.events({
     const target = event.target;
     const text = target.text.value;
 
-    // Insert a message into the collection
-    Messages.insert({
+    var msgId = Messages.insert({
       text,
       createdAt: new Date(),
       owner: Meteor.userId(),
-      username: Meteor.user().username,
+      username: Meteor.user().username
     });
+
+    Meteor.chatbot.executeSentence(text, msgId);
 
     // Clear form
     target.text.value = '';
