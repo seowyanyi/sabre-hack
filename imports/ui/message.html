@@ -8,7 +8,11 @@
 		<div class="message-received">
 			<p>{{text}}</p>
             {{#with metaData}}
+            {{#if this.[0].thumbnail}}
       {{> carousel this}}
+      {{else}}
+      {{> planner this}}
+      {{/if}}
       {{/with}}
 		</div>
 	</div>

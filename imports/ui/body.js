@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import './body.html';
 import './message.js';
 import './carousel.js';
+import './planner.js';
 import { Messages } from '../api/messages.js';
 
 function isSameAsPrevious(prevIsReceived, msg) {
@@ -40,6 +41,6 @@ Template.body.events({
 
     // scroll to last message
     $('.panel-body').scrollTop(Messages.find().count()*100)
-      console.log(Messages.find().count()*100);
+      // console.log(Messages.find().count()*100);
   }
 });

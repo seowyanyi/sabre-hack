@@ -1,0 +1,10 @@
+<template name="planner">
+    {{#each this}}
+	<div class="item">
+        <p>To: {{to}}</p>
+        {{#if from}}<p>From: {{from}}</p>{{/if}}
+        {{#if to}}<p>Depart: {{depart}}</p>{{/if}}
+        {{#if depart}}<p>Return: {{return}}</p>{{/if}}
+	</div>
+    {{/each}}
+</template>
