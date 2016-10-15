@@ -1,21 +1,22 @@
 <template name="message">
-  {{#if isCarousel}}
-                  <div style="width:383px;overflow-x: hidden; padding:10px;">
-                                  {{> carousel}}
-                </div>
-  {{else}}
-  {{#if isReceived username}}
-    <div class="col-message-received">
-      <div class="message-received">
-        <p>{{text}}</p>
-      </div>
-    </div>
-  {{else}}
-    <div class="col-message-sent">
-      <div class="message-sent">
-        <p>{{text}}</p>
-      </div>
-    </div>
-  {{/if}}
-  {{/if}}
+	{{#if isCarousel}}
+	<div style="width:383px;overflow-x: hidden; padding:10px;">
+		{{> carousel}}
+	</div>
+	{{else}} {{#if isReceived username}}
+	<div class="col-message-received">
+		<div class="message-received">
+			<p>{{text}}</p>
+            {{#with metaData}}
+      {{> carousel this}}
+      {{/with}}
+		</div>
+	</div>
+	{{else}}
+	<div class="col-message-sent">
+		<div class="message-sent">
+			<p>{{text}}</p>
+		</div>
+	</div>
+	{{/if}} {{/if}}
 </template>
