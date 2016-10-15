@@ -21,7 +21,7 @@ Template.body.events({
     // Insert a message into the collection
     Messages.insert({
       text,
-      createdAt: new Date(), // current time
+      createdAt: new Date(),
       owner: Meteor.userId(),
       username: Meteor.user().username,
     });
