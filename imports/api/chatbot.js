@@ -47,7 +47,11 @@ function updatePlannerField(field, value) {
 function toHumanReadableDateTime(date) {
   var mlist = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 
-  return date.getDate() + " " + mlist[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+  var s = date.getDate() + " " + mlist[date.getMonth()] + " " + date.getFullYear();
+  if (date.getHours() !== "0" || date.getMinutes() !== "0") {
+    s = s + " " + date.getHours() + ":" + date.getMinutes();
+  }
+  return s;
 }
 
 // Returns array of packages for the carousel
@@ -74,7 +78,8 @@ function getNewYorkPackages() {
  ];
 }
 
-function formatAMPM(date) {
+function formatAMPM(dateStr) {
+  var date = new Date(dateStr);
   var hours = date.getHours();
   var minutes = date.getMinutes();
   var ampm = hours >= 12 ? 'pm' : 'am';
@@ -88,7 +93,7 @@ function formatAMPM(date) {
 
 // Returns array of flights for the carousel
 function getFlights() {
-  var itineraries = hardcoded_flights;
+  var itineraries = hardcoded_flights.PricedItineraries;
   var temp = [];
   itineraries.forEach(function (itinerary) {
     var AirItinerary = itinerary.AirItinerary;
@@ -121,25 +126,9 @@ function getFlights() {
 
   });
 
-  return temp;
+  console.log(temp)
 
- return [
-   {
-      depart: {
-        start: '9:00am',
-        airportStart: 'SIN',
-        end: '12:05pm',
-        airportEnd: 'JFK'
-      },
-      return: {
-        start: '8:35pm',
-        airportStart: 'JFK',
-        end: '11:20pm',
-        airportEnd: 'SIN'
-      },
-      price: '$4050'
-   }
- ];
+  return temp;
 }
 
 function getHotels() {
@@ -205,7 +194,7 @@ function witLocation(sentence, callback, msgId) {
       else if ((local_search_query && stringMatch(lsq_val, NEW_YORK)) || (location && stringMatch(loc_val, NEW_YORK))) {
         callback(NEW_YORK, null, msgId);
       }
-      else if (intent && stringMatch(intent_val, FUN_GALORE)) {
+      else if ((intent && stringMatch(intent_val, FUN_GALORE)) || (local_search_query && stringMatch(lsq_val, FUN_GALORE))) {
         callback(FUN_GALORE);
       }
       else if (intent && intent_val === "reply") {
@@ -215,7 +204,7 @@ function witLocation(sentence, callback, msgId) {
         callback(NEW_YORK);
       }
       else {
-        console.log(data);
+
         callback(UNKNOWN);
       }
     },
