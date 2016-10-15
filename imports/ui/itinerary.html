@@ -1,12 +1,22 @@
 <template name="itinerary">
-	<div class="owl-carousel">
             {{#each this}}
-		<div class="item">
-            <p style="padding-bottom: 10px;"><a class="btn btn-primary btn-outline get-this" style="width:100%;">Get This</a></p>
-			<img src="{{thumbnail}}" alt="Owl Image">
-			<p>{{title}} {{price}}</p>
-			<p style="line-height: normal; padding-bottom:20px;"><small>{{description}}...</small></p>
-		</div>
+		<div class="row">
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+      <img src="images/nyc_cover.png" alt="...">
+      <div class="caption">
+          <p>To: {{to}}</p>
+          <p>From: {{from}}</p>
+          <p>Depart: {{depart}}</p>
+          <p>Return: {{return}}</p>
+          <p>Itinerary: {{itinerary}}</p>
+          <p>Flight: {{flight}}</p>
+          <p>Hotel: {{hotel}}</p>
+          <p>Total: {{total}}</p>
+      </div>
+    <p style="padding-bottom: 10px;"><a class="btn btn-danger btn-outline get-this" style="width:100%;">Pay</a></p>
+    </div>
+  </div>
+</div>
             {{/each}}
-	</div>
 </template>

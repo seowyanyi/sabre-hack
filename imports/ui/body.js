@@ -3,6 +3,7 @@ import './body.html';
 import './message.js';
 import './carousel.js';
 import './planner.js';
+import './itinerary.js';
 import { Messages } from '../api/messages.js';
 
 function isSameAsPrevious(prevIsReceived, msg) {
