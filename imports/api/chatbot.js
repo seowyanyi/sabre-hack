@@ -1,69 +1,84 @@
-// Categorizes a sentence according to the possible actions the chatbot can handle
-// 0. No match
-//
-// 1. Start planning
-//
-//
-// 2. Places of interest
-//
-//
-// 3. Accomodation
-//
-// 4. Flight
 var stringSimilarity = require('string-similarity');
-var THRESHOLD = 0.7;
+var PLAN = "plan";
+var ROOMS = "rooms";
+var FLIGHT = "flight";
+var TIMES_SQUARE = "times square";
+var NEW_YORK = "new york";
+var UNKNOWN = "unknown";
+var FUN_GALORE = "fun galore";
+var REPLY = "reply";
 
-function isCat1(words) {
-  var CAT1 = ['plan', 'trip'];
-  var j = 0;
-  var matches = 0;
+function stringMatch(a, b) {
+  return stringSimilarity.compareTwoStrings(a, b) >= 0.7;
+}
 
-  for (var i=0; i < words.length; i++) {
-    if(stringSimilarity.compareTwoStrings(words[i], CAT1[j]) >= THRESHOLD) {
-      matches++;
-      j++;
+function witLocation(sentence, callback) {
+  sentence = sentence.toLowerCase();
+  $.ajax({
+    url: 'https://api.wit.ai/message',
+    data: {
+      'q': sentence,
+      'access_token' : 'KFUBRDV7HYYJEQ2ATLGFFDBUNSCAMVYE'
+    },
+    method: 'GET',
+    success: function(data) {
+      var entities = data.entities;
+      var intent = entities.intent;
+      var location = entities.location;
+      var local_search_query = entities.local_search_query;
+      var lsq_val = '';
+      var loc_val = '';
+      var intent_val = '';
+      if (local_search_query) {
+        lsq_val = local_search_query[0].value.toLowerCase()
+      }
+      if (location) {
+        loc_val = location[0].value.toLowerCase();
+      }
+      if (intent) {
+        intent_val = intent[0].value.toLowerCase();
+      }
+
+      if (intent && stringMatch(intent[0].value, PLAN)) {
+        callback(PLAN);
+      }
+      else if (local_search_query && stringMatch(lsq_val, ROOMS)) {
+        callback(ROOMS);
+      }
+      else if (local_search_query && stringMatch(lsq_val, FLIGHT)) {
+        callback(FLIGHT);
+      }
+      else if ((local_search_query && stringMatch(lsq_val, TIMES_SQUARE)) || (location && stringMatch(loc_val, TIMES_SQUARE))) {
+        callback(TIMES_SQUARE);
+      }
+      else if ((local_search_query && stringMatch(lsq_val, NEW_YORK)) || (location && stringMatch(loc_val, NEW_YORK))) {
+        callback(NEW_YORK);
+      }
+      else if (intent && stringMatch(intent_val, FUN_GALORE)) {
+        callback(FUN_GALORE);
+      }
+      else if (intent && intent_val === "reply") {
+        callback(REPLY);
+      }
+      else if (sentence.includes('ny')) {
+        callback(NEW_YORK);
+      }
+      else {
+        callback(UNKNOWN);
+      }
+    },
+    error: function(xhr, error) {
+      console.log(error)
     }
-    if (matches === CAT1.length) {
-      return true;
-    } else if (j === CAT1.length) {
-      return false;
-    }
-  }
-
-  return false;
+  });
 }
 
-function isCat2(words) {
-
-}
-
-function isCat3(words) {
-
-}
-
-function isCat4(words) {
-
-}
-
-function categorizeSentence(sentence) {
-  var words = sentence.split(" ");
-  if (isCat1(words)) {
-    return 1;
-  } else if (isCat2(words)) {
-    return 2;
-  } else if (isCat3(words)) {
-    return 3;
-  } else if (isCat4(words)) {
-    return 4;
-  } else {
-    return 0;
-  }
+function commandParser(command) {
+  console.log(command)
 }
 
 function executeSentence(sentence) {
-  var category = categorizeSentence(sentence);
-  console.log(category);
-  return category
+  witLocation(sentence, commandParser)
 }
 
 Meteor.chatbot = {
