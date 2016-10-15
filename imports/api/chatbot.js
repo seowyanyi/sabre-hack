@@ -31,13 +31,22 @@ function botMessage(text, type, metaData) {
 }
 
 function updatePlannerField(field, value) {
-  var plannerMessageId = Session.get('plannerMessageId');
-  var plannerMessage = Messages.findOne(plannerMessageId);
-  plannerMessage['metaData'][field] = value;
-  Messages.update(plannerMessageId, {
-      $set: { metaData: plannerMessage['metaData'] },
+  var planner = getPlanner()
+  planner[field] = value;
+  Messages.update(planner._id, {
+      $set: { metaData: planner },
     });
 }
+
+function getPlanner() {
+  var plannerMessageId = Session.get('plannerMessageId');
+  var plannerMessage = Messages.findOne(plannerMessageId);
+  return plannerMessage['metaData'][0];
+}
+
+// function getLatestItinerary() {
+//   return Itinerary.findOne({}, {sort: {DateTime: -1, limit: 1}});
+// }
 
 function toHumanReadableDateTime(date) {
   var mlist = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
@@ -65,6 +74,76 @@ function getNewYorkPackages() {
       price: '$400',
       title: 'Further Away',
       description: 'Immerse yourself...'
+   }
+ ];
+}
+
+// Returns array of flights for the carousel
+function getFlights() {
+ return [
+   {
+      depart: {
+        start: '9:00am',
+        airportStart: 'SIN',
+        end: '12:05pm',
+        airportEnd: 'JFK'
+      },
+      return: {
+        start: '8:35pm',
+        airportStart: 'JFK',
+        end: '11:20pm',
+        airportEnd: 'SIN'
+      },
+      price: '$4050'
+   },
+   {
+      depart: {
+        start: '3:45pm',
+        airportStart: 'SIN',
+        end: '12:05pm',
+        airportEnd: 'JFK'
+      },
+      return: {
+        start: '8:35pm',
+        airportStart: 'JFK',
+        end: '11:20pm',
+        airportEnd: 'SIN'
+      },
+      price: '$4050'
+   },
+   {
+      depart: {
+        start: '9:00am',
+        airportStart: 'SIN',
+        end: '12:05pm',
+        airportEnd: 'JFK'
+      },
+      return: {
+        start: '8:35pm',
+        airportStart: 'JFK',
+        end: '11:20pm',
+        airportEnd: 'SIN'
+      },
+      price: '$4050'
+   }
+ ];
+}
+
+function getHotels() {
+ return [
+   {
+      thumbnail: 'images/hotel_one_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker',
+      location: 'Broadway - Times Square',
+      stars: 4
+   },
+   {
+      thumbnail: 'images/hotel_two_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker',
+      location: 'Broadway - Times Square',
+      stars: 4
    }
  ];
 }
@@ -137,12 +216,12 @@ function witLocation(sentence, callback, msgId) {
 function commandParser(command, dateStr, msgId) {
   console.log(command);
   if (command === PLAN) {
-    var plannerMessageId = botMessage("", 2, {
+    var plannerMessageId = botMessage("", 2, [{
       to: '',
       from: 'Singapore',
       depart: '',
       return: ''
-    });
+    }]);
     Session.set('isEditingPlanner', true);
     Session.set('plannerMessageId', plannerMessageId);
     Session.set('plannerEditField', 'to');
@@ -163,20 +242,70 @@ function commandParser(command, dateStr, msgId) {
         updatePlannerField('return', dateStr);
         Session.set('isEditingPlanner', false);
         Messages.remove(msgId);
+
         var carouselInfo = getNewYorkPackages();
-        botMessage("These are our best suggestions for you and your friend. Pick one that you like!", "carousel", carouselInfo);
+
+         Meteor.setTimeout(function() {
+          botMessage("These are our best suggestions for you and your friend. Pick one that you like!", "carousel", carouselInfo);
+          }, 2000);
       }
     }
   }
-  else {
-
+  else if (command === FUN_GALORE) {
+    Meteor.setTimeout(function() {
+      botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'flight', getFlights());
+    }, 2000);
+  }
+  else if (command === ROOMS) {
+    Meteor.setTimeout(function() {
+      botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'hotel', getHotels());
+    }, 2000);
   }
 }
+
+
+
+function getFinalItinerary() {
+  return [{
+          to: '',
+          from: 'Singapore',
+          depart: '',
+          return: '',
+          package: {
+            name: '',
+            price: '0'
+          },
+          flight: {
+            name: '',
+            price: '0'
+          },
+          hotel: {
+            name: '',
+            price: '0'
+          },
+          total: '0'
+        }];
+}
+
+function chooseHotelRoom() {
+  Meteor.setTimeout(function() {
+    botMessage("Congrats, your travel plan is complete!", 1);
+  }, 2000);
+
+  Meteor.setTimeout(function() {
+    botMessage("", 'itinerary', getFinalItinerary());
+  }, 3000);
+
+}
+
+
+
 
 function executeSentence(sentence, msgId) {
   witLocation(sentence, commandParser, msgId)
 }
 
 Meteor.chatbot = {
-  executeSentence: executeSentence
+  executeSentence: executeSentence,
+  chooseHotelRoom: chooseHotelRoom
 }
