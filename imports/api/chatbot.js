@@ -36,7 +36,7 @@ function updatePlannerField(field, value) {
   var planner = plannerMessage['metaData'][0];
   planner[field] = value;
   Messages.update(plannerMessageId, {
-      $set: { metaData: planner },
+      $set: { metaData: [planner] },
     });
 }
 
@@ -74,9 +74,21 @@ function getNewYorkPackages() {
  ];
 }
 
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
+
+
 // Returns array of flights for the carousel
 function getFlights() {
-  var itineraries = hardcoded_flights();
+  var itineraries = hardcoded_flights;
   var temp = [];
   itineraries.forEach(function (itinerary) {
     var AirItinerary = itinerary.AirItinerary;
@@ -90,56 +102,28 @@ function getFlights() {
     var returnStart = destFlightSegments[0].DepartureDateTime;
     var returnEnd = destFlightSegments[destFlightSegments.length-1].DepartureDateTime;
 
-    var AirItineraryPricingInfo = itinerary.AirItineraryPricingInfo.ItinTotalFare.TotalFare.Amount;
+    var price = itinerary.AirItineraryPricingInfo.ItinTotalFare.TotalFare.Amount;
     temp.push({
       depart: {
-        start: '9:00am',
+        start: formatAMPM(departureStart),
         airportStart: 'SIN',
-        end: '12:05pm',
+        end: formatAMPM(departureEnd),
         airportEnd: 'JFK'
       },
       return: {
-        start: '8:35pm',
+        start: formatAMPM(returnStart),
         airportStart: 'JFK',
-        end: '11:20pm',
+        end: formatAMPM(returnEnd),
         airportEnd: 'SIN'
       },
-      price: '$4050'
+      price: '$' + price
     })
 
   });
 
+  return temp;
+
  return [
-   {
-      depart: {
-        start: '9:00am',
-        airportStart: 'SIN',
-        end: '12:05pm',
-        airportEnd: 'JFK'
-      },
-      return: {
-        start: '8:35pm',
-        airportStart: 'JFK',
-        end: '11:20pm',
-        airportEnd: 'SIN'
-      },
-      price: '$4050'
-   },
-   {
-      depart: {
-        start: '3:45pm',
-        airportStart: 'SIN',
-        end: '12:05pm',
-        airportEnd: 'JFK'
-      },
-      return: {
-        start: '8:35pm',
-        airportStart: 'JFK',
-        end: '11:20pm',
-        airportEnd: 'SIN'
-      },
-      price: '$4050'
-   },
    {
       depart: {
         start: '9:00am',
@@ -231,6 +215,7 @@ function witLocation(sentence, callback, msgId) {
         callback(NEW_YORK);
       }
       else {
+        console.log(data);
         callback(UNKNOWN);
       }
     },
