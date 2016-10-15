@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import './body.html';
 import './message.js';
+import './carousel.js';
 import { Messages } from '../api/messages.js';
 
 function isSameAsPrevious(prevIsReceived, msg) {
