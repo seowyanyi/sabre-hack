@@ -161,12 +161,8 @@ function formatHotels(resp) {
 
 function getHotels(callback) {
   $.ajax({
-    url: 'http://terminal2.expedia.com:80/x/mhotels/search?city=NYC&checkInDate=2016-12-01&checkOutDate=2016-12-03&room1=2&resultsPerPage=6',
-    headers: {
-      'Authorization': 'Bearer 48RGOAbNOn84uIQS94ppK9uEBRtNdzYL'
-    },
+    url: 'http://terminal2.expedia.com:80/x/mhotels/search?city=NYC&resultsPerPage=6&checkInDate=2016-12-01&checkOutDate=2016-12-03&room1=2&apikey=48RGOAbNOn84uIQS94ppK9uEBRtNdzYL',
     success: function(resp) {
-      console.log(resp);
       callback(formatHotels(resp));
     },
     error: function(err) {
