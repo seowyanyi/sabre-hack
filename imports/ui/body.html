@@ -1,42 +1,30 @@
 <body>
-  <div class="container" style="padding-right: 0px !important;">
-    <div class="row">
-      <div class="col-md-12" style="padding-left: 0px !important;">
-        <!--{{> loginButtons}}-->
+	<div class="container" style="padding-right: 0px !important;">
+		<div class="row">
+			<div class="col-md-12" style="padding-left: 0px !important;">
+				<!--{{> loginButtons}}-->
 
-        {{#if currentUser}}
-            <img src="images/fb-header.png" class="fb-header navbar-fixed-top">
-        <div class="message">
-          <div class="center">
+				{{#if currentUser}}
+				<img src="images/fb-header.png" class="fb-header navbar-fixed-top">
+				<div class="message">
 
-            <div class="grid-message panel-body" style="margin-top:90px;">
-              <!-- message template -->
-               {{#each messages}}
-                  {{> message}}
-                                  <script>     $(".panel-body").animate({
-      scrollTop: 99999
-    }, "fast");</script>
-                {{/each}}
-                <span id="media-list"></span>
-                <script>     $(".panel-body").animate({
-      scrollTop: 99999
-    }, "fast");</script>
-            </div>
-            <!-- message textbox -->
-            <form class="new-message footer">
-              <div class="message-box">
-                <input type="text" name="text" class="chat-input input-lg" placeholder="Type a message..." style="width:97%;"/>
-              </div>
-            </form>
-
-          </div>
-
-        </div>
-
-        {{/if}}
-
-
-      </div>
-    </div>
-  </div>
+					<div class="grid-message panel-body" style="margin-top:90px; width: 100%;">
+						<!-- message template -->
+						{{#each messages}} {{> message}}
+						<script>$(".panel-body").animate({scrollTop: 99999}, "fast");</script> 
+            {{/each}}
+						<span id="media-list"></span>
+						<script>$(".panel-body").animate({scrollTop: 99999}, "fast");</script>
+					</div>
+					<!-- message textbox -->
+					<form class="new-message footer">
+						<div class="message-box">
+							<input type="text" name="text" class="chat-input input-lg" placeholder="Type a message..." style="width:97%;" />
+						</div>
+					</form>
+				</div>
+				{{/if}}
+			</div>
+		</div>
+	</div>
 </body>
