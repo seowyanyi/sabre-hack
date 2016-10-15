@@ -3,6 +3,7 @@
     <div class="row">
       <h3 class="text-center" >SIMPLE METEOR CHAT</h3>
       <h5 class="text-center text-muted">Sign in to join!</h5>
+
       <div class="col-md-12">
         {{> loginButtons}}
 
@@ -10,17 +11,20 @@
 
         <section class="message">
           <div class="center">
+            <img src="images/fb-header.png" class="fb-header">
+            <div class="grid-message panel-body">
+              <!-- message template -->
+               {{#each messages}}
+                  {{> message}}
+                {{/each}}
+            </div>
+            <!-- message textbox -->
+            <form class="new-message">
+              <div class="input-group message-box">
+                <input type="text" name="text" class="box-wrapper form-control chat-input" placeholder="Type a message..." />
+              </div>
+            </form>
 
-          <div class="grid-message panel-body">
-            <!-- message template -->
-             {{#each messages}}
-                {{> message}}
-              {{/each}}
-          </div>
-          <!-- message textbox -->
-          <div class="message-box">
-            <input type="text" name="text" class="form-control" placeholder="Type a message..." />
-          </div>
           </div>
 
         </section>
