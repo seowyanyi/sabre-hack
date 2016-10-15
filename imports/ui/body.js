@@ -7,6 +7,9 @@ function isSameAsPrevious(prevIsReceived, msg) {
   return prevIsReceived === isReceived(msg);
 }
 
+Template.body.onRendered(function () {
+});
+
 Template.body.helpers({
   messages() {
     return Messages.find();
@@ -34,6 +37,7 @@ Template.body.events({
     target.text.value = '';
 
     // scroll to last message
-    $('.panel-body').scrollTop($('.media-list').height())
+    $('.panel-body').scrollTop(Messages.find().count()*100)
+      console.log(Messages.find().count()*100);
   }
 });

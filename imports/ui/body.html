@@ -1,33 +1,34 @@
 <body>
-  <div class="container">
+  <div class="container" style="padding-right: 0px !important;">
     <div class="row">
-      <h3 class="text-center" >SIMPLE METEOR CHAT</h3>
-      <h5 class="text-center text-muted">Sign in to join!</h5>
-
-      <div class="col-md-12">
-        {{> loginButtons}}
+      <div class="col-md-12" style="padding-left: 0px !important;">
+        <!--{{> loginButtons}}-->
 
         {{#if currentUser}}
-
-        <section class="message">
+            <img src="images/fb-header.png" class="fb-header navbar-fixed-top">
+        <div class="message">
           <div class="center">
-            <img src="images/fb-header.png" class="fb-header">
-            <div class="grid-message panel-body">
+
+            <div class="grid-message panel-body" style="margin-top:90px;">
               <!-- message template -->
                {{#each messages}}
                   {{> message}}
                 {{/each}}
+                <span id="media-list"></span>
+                <script>     $(".panel-body").animate({
+      scrollTop: 7200
+    }, "fast");</script>
             </div>
             <!-- message textbox -->
-            <form class="new-message">
-              <div class="input-group message-box">
-                <input type="text" name="text" class="box-wrapper form-control chat-input" placeholder="Type a message..." />
+            <form class="new-message footer">
+              <div class="message-box">
+                <input type="text" name="text" class="chat-input input-lg" placeholder="Type a message..." style="width:97%;"/>
               </div>
             </form>
 
           </div>
 
-        </section>
+        </div>
 
         {{/if}}
 
