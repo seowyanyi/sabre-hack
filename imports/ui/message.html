@@ -7,13 +7,15 @@
 	<div class="col-message-received">
 		<div class="message-received">
 			<p>{{text}}</p>
-            {{#with metaData}}
-            {{#if this.[0].thumbnail}}
-      {{> carousel this}}
-      {{else}}
-      {{> planner this}}
+			{{#if isCarousel type}}
+      {{> carousel metaData}}
+	{{/if}}
+      {{#if isTwo type}}
+      {{> planner metaData}}
       {{/if}}
-      {{/with}}
+	        {{#if isItinerary type}}
+			{{> carousel metaData}}
+      {{/if}}
 		</div>
 	</div>
 	{{else}}

@@ -5,7 +5,13 @@ Template.message.helpers({
   isReceived(username) {
     return username !== Meteor.user().username;
   },
-  isCarousel() {
-    return false;
-  }
+  isCarousel(type) {
+    if(type == 'carousel') return true;
+  },
+    isTwo(type) {
+    if(type == 2) return true;
+  },
+    isItinerary(type) {
+    if(type == 'itinerary') return true;
+  },
 });

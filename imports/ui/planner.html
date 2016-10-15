@@ -1,10 +1,24 @@
 <template name="planner">
     {{#each this}}
 	<div class="item">
-        <p>To: {{to}}</p>
-        {{#if from}}<p>From: {{from}}</p>{{/if}}
-        {{#if to}}<p>Depart: {{depart}}</p>{{/if}}
-        {{#if depart}}<p>Return: {{return}}</p>{{/if}}
+        <p>To: {{to}} {{#unless to}}<img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;">{{/unless}}</p>
+        {{#if from}}<p>From: {{from}}</p>
+        {{else}}
+        <p>From: <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
+        {{/if}}
+
+        {{#if to}}
+        {{#if depart}}<p>Depart: {{depart}}</p>
+                {{else}}
+        <p>Depart: <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
+        {{/if}}
+        {{/if}}
+        {{#if depart}}
+        {{#if return}}<p>Return: {{return}}</p>
+                {{else}}
+        <p>Return: <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
+        {{/if}}
+        {{/if}}
 	</div>
     {{/each}}
 </template>
