@@ -4,5 +4,8 @@ import './message.html';
 Template.message.helpers({
   isReceived(username) {
     return username !== Meteor.user().username;
+  },
+  isCarousel() {
+    return false;
   }
 });
