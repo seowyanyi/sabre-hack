@@ -19,7 +19,7 @@ function stringMatch(a, b) {
 // type: 1 (normal), type: 2 (planner)
 // metaData: in json format
 function botMessage(text, type, metaData) {
-  metaData = metaData || {};
+  metaData = metaData || [{}];
   return Messages.insert({
     text,
     type: type,
