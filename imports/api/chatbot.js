@@ -155,8 +155,43 @@ function getFlights(callback) {
   });
 }
 
-function getHotels() {
- return [
+function formatHotels(resp) {
+
+}
+
+function getHotels(callback) {
+  $.ajax({
+    url: 'http://terminal2.expedia.com:80/x/mhotels/search?city=NYC&checkInDate=2016-12-01&checkOutDate=2016-12-03&room1=2&resultsPerPage=6',
+    headers: {
+      'Authorization': 'Bearer 48RGOAbNOn84uIQS94ppK9uEBRtNdzYL'
+    },
+    success: function(resp) {
+      console.log(resp);
+      callback(formatHotels(resp));
+    },
+    error: function(err) {
+      console.log(err);
+      callback([   {
+      thumbnail: 'images/hotel_one_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker',
+      location: 'Broadway - Times Square',
+      stars: 4
+   },
+   {
+      thumbnail: 'images/hotel_two_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker',
+      location: 'Broadway - Times Square',
+      stars: 4
+   },
+   {
+      thumbnail: 'images/hotel_three_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker',
+      location: 'Broadway - Times Square',
+      stars: 4
+   },
    {
       thumbnail: 'images/hotel_one_photo.jpg',
       price: '$200',
@@ -170,8 +205,16 @@ function getHotels() {
       title: 'Breath Taker',
       location: 'Broadway - Times Square',
       stars: 4
-   }
- ];
+   },
+   {
+      thumbnail: 'images/hotel_three_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker',
+      location: 'Broadway - Times Square',
+      stars: 4
+   }])
+    }
+  });
 }
 
 function witLocation(sentence, callback, msgId) {
@@ -279,14 +322,14 @@ function commandParser(command, dateStr, msgId) {
     }
   }
   else if (command === FUN_GALORE) {
-    getFlights(function(resp) {
-      botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'flight', resp);
+    getFlights(function(flights) {
+      botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'flight', flights);
     });
   }
   else if (command === ROOMS) {
-    Meteor.setTimeout(function() {
-      botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'hotel', getHotels());
-    }, 2000);
+    getHotels(function(rooms) {
+      botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'hotel', rooms);
+    });
   }
 }
 
