@@ -2,7 +2,6 @@ var stringSimilarity = require('string-similarity');
 var PLAN = "plan";
 var ROOMS = "rooms";
 var FLIGHT = "flight";
-var TIMES_SQUARE = "times square";
 var NEW_YORK = "new york";
 var UNKNOWN = "unknown";
 var FUN_GALORE = "fun galore";
@@ -48,6 +47,30 @@ function toHumanReadableDateTime(date) {
   return date.getDate() + " " + mlist[date.getMonth()] + " " + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
 }
 
+// Returns array of packages for the carousel
+function getNewYorkPackages() {
+ return [
+   {
+      thumbnail: 'images/itinerary_one_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker'
+      description: 'Enjoy the sights and sounds of our sight seeing package by starting the morning with...'
+   },
+   {
+      thumbnail: 'images/itinerary_two_photo.jpg',
+      price: '$400',
+      title: 'Fun Galore'
+      description: 'Indulge in the sophistication of The Metropolitian Museum of Art as we bring you through timeless stories...'
+   },
+   {
+      thumbnail: 'images/itinerary_three_photo.jpg',
+      price: '$400',
+      title: 'Further Away'
+      description: 'Immerse yourself...'
+   }
+ ];
+}
+
 function witLocation(sentence, callback, msgId) {
   sentence = sentence.toLowerCase();
   $.ajax({
@@ -89,9 +112,6 @@ function witLocation(sentence, callback, msgId) {
       else if (local_search_query && stringMatch(lsq_val, FLIGHT)) {
         callback(FLIGHT);
       }
-      else if ((local_search_query && stringMatch(lsq_val, TIMES_SQUARE)) || (location && stringMatch(loc_val, TIMES_SQUARE))) {
-        callback(TIMES_SQUARE);
-      }
       else if ((local_search_query && stringMatch(lsq_val, NEW_YORK)) || (location && stringMatch(loc_val, NEW_YORK))) {
         callback(NEW_YORK, null, msgId);
       }
@@ -125,7 +145,6 @@ function commandParser(command, dateStr, msgId) {
       depart: '',
       return: ''
     });
-    console.log('plannerMessageId ' + plannerMessageId);
     Session.set('isEditingPlanner', true);
     Session.set('plannerMessageId', plannerMessageId);
     Session.set('plannerEditField', 'to');
@@ -134,7 +153,6 @@ function commandParser(command, dateStr, msgId) {
     if (Session.get('isEditingPlanner')) {
       updatePlannerField('to', 'New York City');
       Session.set('plannerEditField', 'depart');
-      Messages.remove(msgId);
     }
   }
   else if (command === DATE_TIME) {
@@ -147,6 +165,8 @@ function commandParser(command, dateStr, msgId) {
         updatePlannerField('return', dateStr);
         Session.set('isEditingPlanner', false);
         Messages.remove(msgId);
+        var carouselInfo = getNewYorkPackages();
+        botMessage("These are our best suggestions for you and your friend. Pick one that you like!", "carousel", carouselInfo);
       }
     }
   }
