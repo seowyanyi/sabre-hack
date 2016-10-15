@@ -33,9 +33,7 @@ function botMessage(text, type, metaData) {
 function updatePlannerField(field, value) {
   var plannerMessageId = Session.get('plannerMessageId');
   var plannerMessage = Messages.findOne(plannerMessageId);
-  console.log(plannerMessage);
   plannerMessage['metaData'][field] = value;
-  console.log(plannerMessage);
   Messages.update(plannerMessageId, {
       $set: { metaData: plannerMessage['metaData'] },
     });
@@ -53,19 +51,19 @@ function getNewYorkPackages() {
    {
       thumbnail: 'images/itinerary_one_photo.jpg',
       price: '$200',
-      title: 'Breath Taker'
+      title: 'Breath Taker',
       description: 'Enjoy the sights and sounds of our sight seeing package by starting the morning with...'
    },
    {
       thumbnail: 'images/itinerary_two_photo.jpg',
       price: '$400',
-      title: 'Fun Galore'
+      title: 'Fun Galore',
       description: 'Indulge in the sophistication of The Metropolitian Museum of Art as we bring you through timeless stories...'
    },
    {
       thumbnail: 'images/itinerary_three_photo.jpg',
       price: '$400',
-      title: 'Further Away'
+      title: 'Further Away',
       description: 'Immerse yourself...'
    }
  ];
