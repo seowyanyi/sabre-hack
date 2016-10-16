@@ -5,6 +5,7 @@ import './carousel.js';
 import './planner.js';
 import './itinerary.js';
 import './flight.js';
+import './hotel.js';
 import { Messages } from '../api/messages.js';
 
 function isSameAsPrevious(prevIsReceived, msg) {

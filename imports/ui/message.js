@@ -15,7 +15,9 @@ Template.message.helpers({
     if(type == 'itinerary') return true;
   },
       isFlight(type) {
-    if(type == 'flight') return true;
+    if(type == 'flight') {
+      return true;
+    }
   },
   isHotel(type) {
     if(type == 'hotel') return true;

@@ -1,0 +1,14 @@
+<template name="hotel">
+    	<div class="owl-carousel">
+            {{#each this}}
+<div class="item">
+            <p style="padding-bottom: 10px;"><a class="btn btn-primary btn-outline get-this" style="width:100%;">Get This</a></p>
+            <p><b>{{price}}</b></p>
+			<img src="{{thumbnail}}" alt="Owl Image">
+			<p>{{title}}, {{location}}</p>
+            <br>
+			<p style="line-height: normal; padding-bottom:20px;"><small>{{stars}} stars</small></p>
+		</div>
+            {{/each}}
+    	</div>
+</template>
