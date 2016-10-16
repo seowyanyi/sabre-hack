@@ -25,8 +25,8 @@ function botMessage(text, type, metaData) {
     text,
     type: type,
     createdAt: new Date(),
-    owner: "eaves",
-    username: "Eaves",
+    owner: "chatplanner",
+    username: "chatplanner",
     metaData: metaData
   });
 }
@@ -41,9 +41,11 @@ function updatePlannerField(field, value) {
     });
 }
 
-// function getLatestItinerary() {
-//   return Itinerary.findOne({}, {sort: {DateTime: -1, limit: 1}});
-// }
+function getPlannerField() {
+  var plannerMessageId = Session.get('plannerMessageId');
+  var plannerMessage = Messages.findOne(plannerMessageId);
+  return plannerMessage['metaData'][0];
+}
 
 function toHumanReadableDateTime(date) {
   var mlist = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
@@ -58,6 +60,24 @@ function toHumanReadableDateTime(date) {
 // Returns array of packages for the carousel
 function getNewYorkPackages() {
  return [
+   {
+      thumbnail: 'images/itinerary_one_photo.jpg',
+      price: '$200',
+      title: 'Breath Taker',
+      description: 'Enjoy the sights and sounds of our sight seeing package by starting the morning with...'
+   },
+   {
+      thumbnail: 'images/itinerary_two_photo.jpg',
+      price: '$400',
+      title: 'Fun Galore',
+      description: 'Indulge in the sophistication of The Metropolitian Museum of Art as we bring you through timeless stories...'
+   },
+   {
+      thumbnail: 'images/itinerary_three_photo.jpg',
+      price: '$400',
+      title: 'Further Away',
+      description: 'Immerse yourself...'
+   },
    {
       thumbnail: 'images/itinerary_one_photo.jpg',
       price: '$200',
@@ -156,7 +176,24 @@ function getFlights(callback) {
 }
 
 function formatHotels(resp) {
-
+  var hotels = resp.hotelList;
+  var images = ['images/hotel_one_photo.jpg', 'images/hotel_two_photo.jpg', 'images/hotel_three_photo.jpg']
+  var temp = []
+  hotels.forEach(function (hotel, i) {
+    var thumbnail = images[i%(images.length)];
+    var price = hotel.lowRateInfo.formattedTotalPriceWithMandatoryFees;
+    var title = hotel.name;
+    var location = hotel.address;
+    var stars = parseInt(hotel.hotelStarRating);
+    temp.push({
+      thumbnail: thumbnail,
+      price: price,
+      title: title,
+      location: location,
+      stars: stars
+    })
+  });
+  return temp;
 }
 
 function getHotels(callback) {
@@ -167,47 +204,47 @@ function getHotels(callback) {
     },
     error: function(err) {
       console.log(err);
-      callback([   {
+      callback([{
       thumbnail: 'images/hotel_one_photo.jpg',
-      price: '$200',
-      title: 'Breath Taker',
-      location: 'Broadway - Times Square',
+      price: '$754.30',
+      title: 'The Roosevelt Hotel, New York City',
+      location: '45 E 45th Street',
       stars: 4
    },
    {
       thumbnail: 'images/hotel_two_photo.jpg',
-      price: '$200',
-      title: 'Breath Taker',
-      location: 'Broadway - Times Square',
+      price: '$598.00',
+      title: 'YOTEL New York at Times Square',
+      location: '570 Tenth Avenue',
       stars: 4
    },
    {
       thumbnail: 'images/hotel_three_photo.jpg',
-      price: '$200',
-      title: 'Breath Taker',
-      location: 'Broadway - Times Square',
-      stars: 4
+      price: '$758.41',
+      title: 'The Belvedere Hotel',
+      location: '319 W 48th St',
+      stars: 3
    },
    {
       thumbnail: 'images/hotel_one_photo.jpg',
-      price: '$200',
-      title: 'Breath Taker',
-      location: 'Broadway - Times Square',
+      price: '$754.30',
+      title: 'The Roosevelt Hotel, New York City',
+      location: '45 E 45th Street',
       stars: 4
    },
    {
       thumbnail: 'images/hotel_two_photo.jpg',
-      price: '$200',
-      title: 'Breath Taker',
-      location: 'Broadway - Times Square',
+      price: '$598.00',
+      title: 'YOTEL New York at Times Square',
+      location: '570 Tenth Avenue',
       stars: 4
    },
    {
       thumbnail: 'images/hotel_three_photo.jpg',
-      price: '$200',
-      title: 'Breath Taker',
-      location: 'Broadway - Times Square',
-      stars: 4
+      price: '$758.41',
+      title: 'The Belvedere Hotel',
+      location: '319 W 48th St',
+      stars: 3
    }])
     }
   });
@@ -319,22 +356,25 @@ function commandParser(command, dateStr, msgId) {
   }
   else if (command === FUN_GALORE) {
     getFlights(function(flights) {
+      console.log(flights);
       botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'flight', flights);
     });
   }
   else if (command === ROOMS) {
     getHotels(function(rooms) {
+      console.log(rooms);
       botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'hotel', rooms);
     });
   }
 }
 
 function getFinalItinerary() {
+  var planner = getPlannerField();
   return [{
-          to: 'NEW YORK CITY',
-          from: 'Singapore',
-          depart: '10 Nov',
-          return: '15 Nov',
+          to: planner['to'],
+          from: planner['from'],
+          depart: planner['depart'],
+          return: planner['return'],
           package: {
             name: 'Fun Galore',
             price: '$400'
@@ -354,11 +394,11 @@ function getFinalItinerary() {
 function chooseHotelRoom() {
   Meteor.setTimeout(function() {
     botMessage("Congrats, your travel plan is complete!", 1);
-  }, 2000);
+  }, 1500);
 
   Meteor.setTimeout(function() {
     botMessage("", 'itinerary', getFinalItinerary());
-  }, 3000);
+  }, 4000);
 
 }
 
