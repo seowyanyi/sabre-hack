@@ -34,6 +34,7 @@ function botMessage(text, type, metaData) {
 function updatePlannerField(field, value) {
   var plannerMessageId = Session.get('plannerMessageId');
   var plannerMessage = Messages.findOne(plannerMessageId);
+  console.log('plannerMessageId ' + plannerMessageId)
   var planner = plannerMessage['metaData'][0];
   planner[field] = value;
   Messages.update(plannerMessageId, {
@@ -366,12 +367,14 @@ function commandParser(command, dateStr, msgId) {
   else if (command === FUN_GALORE) {
     getFlights(function(flights) {
       console.log(flights);
+      Session.set('flights', true);
       botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'flight', flights);
     });
   }
   else if (command === ROOMS) {
     getHotels(function(rooms) {
       console.log(rooms);
+      Session.set('rooms', true);
       botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'hotel', rooms);
     });
   }
