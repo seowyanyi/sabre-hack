@@ -14,4 +14,10 @@ Template.message.helpers({
     isItinerary(type) {
     if(type == 'itinerary') return true;
   },
+      isFlight(type) {
+    if(type == 'flight') return true;
+  },
+  isHotel(type) {
+    if(type == 'hotel') return true;
+  }
 });

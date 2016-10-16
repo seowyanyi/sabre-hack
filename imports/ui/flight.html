@@ -1,0 +1,13 @@
+<template name="flight">
+    	<div class="owl-carousel">
+            {{#each this}}
+            <div class="item">
+            <p style="padding-bottom: 10px;"><a class="btn btn-primary btn-outline get-this" style="width:100%;">Get This</a></p>
+            <p><b>{{price}}</b></p>
+			<p><u>Depart:</u> {{depart.airportStart}} at {{depart.start}} - {{depart.airportEnd}} at {{depart.end}} </p>
+            <br>
+            <p><u>Return:</u> {{return.airportStart}} at {{return.start}} - {{return.airportEnd}} at {{return.end}} </p>
+		</div>
+            {{/each}}
+    	</div>
+</template>

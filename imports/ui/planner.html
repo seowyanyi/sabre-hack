@@ -1,22 +1,22 @@
 <template name="planner">
     {{#each this}}
 	<div class="item">
-        <p>To: {{to}} {{#unless to}}<img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;">{{/unless}}</p>
-        {{#if from}}<p>From: {{from}}</p>
+        <p><u>To:</u> {{to}} {{#unless to}}<img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;">{{/unless}}</p>
+        {{#if from}}<p><u>From:</u> {{from}}</p>
         {{else}}
-        <p>From: <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
+        <p><u>From:</u> <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
         {{/if}}
 
         {{#if to}}
-        {{#if depart}}<p>Depart: {{depart}}</p>
+        {{#if depart}}<p><u>Depart:</u> {{depart}}</p>
                 {{else}}
-        <p>Depart: <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
+        <p><u>Depart:</u> <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
         {{/if}}
         {{/if}}
         {{#if depart}}
-        {{#if return}}<p>Return: {{return}}</p>
+        {{#if return}}<p><u>Return:</u> {{return}}</p>
                 {{else}}
-        <p>Return: <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
+        <p><u>Return:</u> <img src="http://www.darwinrecruitment.com/img/ajax-loader.png" style="height:100px;"></p>
         {{/if}}
         {{/if}}
 	</div>

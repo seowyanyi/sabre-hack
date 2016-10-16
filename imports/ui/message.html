@@ -16,13 +16,18 @@
 	        {{#if isItinerary type}}
 			{{> itinerary metaData}}
       {{/if}}
+	  	        {{#if isFlight type}}
+			{{> flight metaData}}
+      {{/if}}
 		</div>
 	</div>
 	{{else}}
 	<div class="col-message-sent">
 		<div class="message-sent">
 			<p>{{text}}</p>
+			<p> <img class="img-circle pull-right" src="images/yl_bubble_pic.png" style="width:25px;"></p>
 		</div>
+		
 	</div>
 	{{/if}} {{/if}}
 </template>

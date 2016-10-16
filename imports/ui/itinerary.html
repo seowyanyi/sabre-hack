@@ -5,14 +5,14 @@
     <div class="thumbnail">
       <img src="images/nyc_cover.png" alt="...">
       <div class="caption">
-          <p>To: {{to}}</p>
-          <p>From: {{from}}</p>
-          <p>Depart: {{depart}}</p>
-          <p>Return: {{return}}</p>
-          <p>Itinerary: {{itinerary}}</p>
-          <p>Flight: {{flight}}</p>
-          <p>Hotel: {{hotel}}</p>
-          <p>Total: {{total}}</p>
+          <p><u>To:</u> {{to}}</p>
+          <p><u>From:</u> {{from}}</p>
+          <p><u>Depart:</u> {{depart}}</p>
+          <p><u>Return:</u> {{return}}</p>
+          <p><u>Itinerary:</u> {{package.name}} <span class="pull-right">{{package.price}}</span></p>
+          <p><u>Flight:</u> {{flight.name}} <span class="pull-right">{{flight.price}}</span></p>
+          <p><u>Hotel:</u> {{hotel.name}} <span class="pull-right">{{hotel.price}}</span></p>
+          <p><u>Total:</u> {{total}}</p>
       </div>
     <p style="padding-bottom: 10px;"><a class="btn btn-danger btn-outline get-this" style="width:100%;">Pay</a></p>
     </div>
