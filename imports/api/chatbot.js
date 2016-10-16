@@ -114,12 +114,14 @@ function formatAMPM(dateStr) {
 function formatFlights(resp) {
   var itineraries = resp.PricedItineraries;
   var temp = [];
-  itineraries.forEach(function (itinerary) {
+  itineraries.forEach(function (itinerary, i) {
     var AirItinerary = itinerary.AirItinerary;
     var origin = AirItinerary.OriginDestinationOptions.OriginDestinationOption[0];
     var originFlightSegments = origin.FlightSegment;
     var departureStart = originFlightSegments[0].DepartureDateTime;
     var departureEnd = originFlightSegments[originFlightSegments.length-1].DepartureDateTime;
+
+    var airline = originFlightSegments[0].OperatingAirline.Code + originFlightSegments[0].OperatingAirline.FlightNumber;
 
     var dest = AirItinerary.OriginDestinationOptions.OriginDestinationOption[1];
     var destFlightSegments = dest.FlightSegment;
@@ -127,7 +129,14 @@ function formatFlights(resp) {
     var returnEnd = destFlightSegments[destFlightSegments.length-1].DepartureDateTime;
 
     var price = itinerary.AirItineraryPricingInfo.ItinTotalFare.TotalFare.Amount;
+
+    if (i === 0) {
+      updatePlannerField('airline', airline);
+      updatePlannerField('airline_price', '$' + price);
+    }
+
     temp.push({
+      airline: airline,
       depart: {
         start: formatAMPM(departureStart),
         airportStart: 'SIN',
@@ -177,14 +186,17 @@ function getFlights(callback) {
 
 function formatHotels(resp) {
   var hotels = resp.hotelList;
-  var images = ['images/hotel_one_photo.jpg', 'images/hotel_two_photo.jpg', 'images/hotel_three_photo.jpg']
   var temp = []
   hotels.forEach(function (hotel, i) {
-    var thumbnail = images[i%(images.length)];
+    var thumbnail = 'https://images.trvl-media.com/' + hotel. thumbnailUrl;
     var price = hotel.lowRateInfo.formattedTotalPriceWithMandatoryFees;
     var title = hotel.name;
     var location = hotel.address;
     var stars = parseInt(hotel.hotelStarRating);
+    if (i === 0) {
+      updatePlannerField('hotel', title);
+      updatePlannerField('hotel_price', price);
+    }
     temp.push({
       thumbnail: thumbnail,
       price: price,
@@ -304,7 +316,6 @@ function witLocation(sentence, callback, msgId) {
         callback(NEW_YORK);
       }
       else {
-
         callback(UNKNOWN);
       }
     },
@@ -313,8 +324,6 @@ function witLocation(sentence, callback, msgId) {
     }
   });
 }
-
-
 
 function commandParser(command, dateStr, msgId) {
   console.log(command);
@@ -368,8 +377,13 @@ function commandParser(command, dateStr, msgId) {
   }
 }
 
+function stripDollarSign(priceStr) {
+  return parseFloat(priceStr.replace(/\s/g, '').slice(1));
+}
+
 function getFinalItinerary() {
   var planner = getPlannerField();
+  var totalPrice = 400 + stripDollarSign(planner['airline_price']) + stripDollarSign(planner['hotel_price']);
   return [{
           to: planner['to'],
           from: planner['from'],
@@ -380,14 +394,14 @@ function getFinalItinerary() {
             price: '$400'
           },
           flight: {
-            name: 'China Air',
-            price: '$4050'
+            name: planner['airline'],
+            price: planner['airline_price']
           },
           hotel: {
-            name: 'Mandarin Oriental',
-            price: '$853'
+            name: planner['hotel'],
+            price: planner['hotel_price']
           },
-          total: '$5303'
+          total: '$' + totalPrice
         }];
 }
 
