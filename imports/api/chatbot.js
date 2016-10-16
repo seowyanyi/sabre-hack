@@ -7,7 +7,7 @@ var UNKNOWN = "unknown";
 var FUN_GALORE = "fun galore";
 var REPLY = "reply";
 var DATE_TIME = "datetime";
-
+var PLANNER_ID_YY = '';
 import { Messages } from '../api/messages.js';
 import {backupFlights} from  './backupFlights.js'
 
@@ -33,19 +33,28 @@ function botMessage(text, type, metaData) {
 
 function updatePlannerField(field, value) {
   var plannerMessageId = Session.get('plannerMessageId');
-  var plannerMessage = Messages.findOne(plannerMessageId);
-  console.log('plannerMessageId ' + plannerMessageId)
-  var planner = plannerMessage['metaData'][0];
-  planner[field] = value;
-  Messages.update(plannerMessageId, {
-      $set: { metaData: [planner] },
-    });
+  var plannerMessage = {};
+  if (!plannerMessageId) {
+    plannerMessageId = PLANNER_ID_YY;
+  }
+
+  plannerMessage = Messages.findOne(plannerMessageId);
+  var planner = {}
+  if (plannerMessage && plannerMessage['metaData']) {
+    planner = plannerMessage['metaData'][0];
+    planner[field] = value;
+    Messages.update(plannerMessageId, {
+        $set: { metaData: [planner] },
+      });
+  }
 }
 
 function getPlannerField() {
-  var plannerMessageId = Session.get('plannerMessageId');
-  var plannerMessage = Messages.findOne(plannerMessageId);
-  return plannerMessage['metaData'][0];
+  if (plannerMessage && plannerMessage['metaData']) {
+    var plannerMessageId = Session.get('plannerMessageId');
+    var plannerMessage = Messages.findOne(plannerMessageId);
+    return plannerMessage['metaData'][0];
+  }
 }
 
 function toHumanReadableDateTime(date) {
@@ -336,6 +345,7 @@ function commandParser(command, dateStr, msgId) {
       return: ''
     }]);
     Session.set('isEditingPlanner', true);
+    PLANNER_ID_YY = plannerMessageId;
     Session.set('plannerMessageId', plannerMessageId);
     Session.set('plannerEditField', 'to');
   }
@@ -367,14 +377,14 @@ function commandParser(command, dateStr, msgId) {
   else if (command === FUN_GALORE) {
     getFlights(function(flights) {
       console.log(flights);
-      Session.set('flights', true);
+      Session.set('flights', flights);
       botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'flight', flights);
     });
   }
   else if (command === ROOMS) {
     getHotels(function(rooms) {
       console.log(rooms);
-      Session.set('rooms', true);
+      Session.set('rooms', rooms);
       botMessage("These are our best suggestions for you and your friend. Pick one that you like!", 'hotel', rooms);
     });
   }
@@ -411,16 +421,19 @@ function getFinalItinerary() {
 function chooseHotelRoom() {
   Meteor.setTimeout(function() {
     botMessage("Congrats, your travel plan is complete!", 1);
-  }, 1500);
+  }, 500);
 
   Meteor.setTimeout(function() {
-    botMessage("", 'itinerary', getFinalItinerary());
-  }, 4000);
+    var finalStuff = getFinalItinerary();
+    console.log(finalStuff);
+    botMessage("", 'itinerary', finalStuff);
+  }, 3000);
 
 }
 
 
 function executeSentence(sentence, msgId) {
+  console.log('executeSentence ' + sentence + ' ' + msgId)
   witLocation(sentence, commandParser, msgId)
 }
 
