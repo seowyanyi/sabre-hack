@@ -396,7 +396,8 @@ function stripDollarSign(priceStr) {
 
 function getFinalItinerary() {
   var planner = getPlannerField();
-  var totalPrice = 400 + stripDollarSign(planner['airline_price']) + stripDollarSign(planner['hotel_price']);
+  if(planner) {
+var totalPrice = 400 + stripDollarSign(planner['airline_price']) + stripDollarSign(planner['hotel_price']);
   return [{
           to: planner['to'],
           from: planner['from'],
@@ -416,6 +417,10 @@ function getFinalItinerary() {
           },
           total: '$' + totalPrice
         }];
+  } else {
+    return [];
+  }
+  
 }
 
 function chooseHotelRoom() {

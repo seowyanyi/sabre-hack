@@ -6,3 +6,9 @@ Template.hotel.events({
     Meteor.chatbot.chooseHotelRoom();
   }
 });
+
+Template.hotel.onRendered(function () {
+    $(".owl-carousel").owlCarousel({
+        autoPlay: 2000
+    });
+});
